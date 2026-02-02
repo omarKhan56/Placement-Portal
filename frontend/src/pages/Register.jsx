@@ -65,7 +65,7 @@ export default function Register() {
       delete userData.confirmPassword;
 
       const user = await register(userData);
-      toast.success('🎉 Registration successful!');
+      toast.success(' Registration successful!');
       
       const roleRoutes = {
         student: '/student/dashboard',

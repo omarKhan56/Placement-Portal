@@ -213,7 +213,7 @@ export default function StudentDashboard() {
           ))}
         </div>
 
-        {/* Employability Score */}
+    
         {profile && (
           <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm animate-slide-up">
             <CardHeader>
@@ -338,6 +338,5 @@ export default function StudentDashboard() {
   );
 }
 
-// Import these components (we'll update them next)
 import RecommendedJobs from '../components/student/RecommendedJobs';
 import ApplicationTracker from '../components/student/ApplicationTracker';
