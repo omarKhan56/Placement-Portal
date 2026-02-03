@@ -1,27 +1,28 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');  //This instantly upgrades your backend to production-level security. 
+const rateLimit = require('express-rate-limit'); //Limits how many requests a user can send.
 const connectDB = require('./config/db');
 
 // Load env vars
-dotenv.config();
+dotenv.config(); //// Load environment variables from .env file
+                 //Keeps secrets (DB URI, JWT secret) out of codebase
 
 const app = express();
 
-// Body parser
-app.use(express.json());
+
+app.use(express.json());  // this both lines 15 and 16 Converts incoming JSON / form data into req.body
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
-app.use(cors({
+app.use(cors({   // Line 19-23 Only allows your frontend to access backend
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
-  credentials: true,
+  credentials: true, // credentials: true allows cookies / auth headers
 }));
 
 // Security headers
-app.use(helmet());
+app.use(helmet()); //  Adds multiple security protections automatically
 
 // Rate limiting
 const limiter = rateLimit({
