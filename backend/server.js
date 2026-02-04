@@ -1,6 +1,6 @@
 const express = require('express');
-const dotenv = require('dotenv');
-const cors = require('cors');
+const dotenv = require('dotenv');//To load environment variables from a .env file into process.env.
+const cors = require('cors'); //CORS (Cross-Origin Resource Sharing) is a browser security feature that blocks requests from different origins (domains) by default.
 const helmet = require('helmet');  //This instantly upgrades your backend to production-level security. 
 const rateLimit = require('express-rate-limit'); //Limits how many requests a user can send.
 const connectDB = require('./config/db');
@@ -29,7 +29,7 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // limit each IP to 100 requests per windowMs
 });
-app.use('/api', limiter);
+app.use('/api', limiter); // Apply rate limiting to all /api routes
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -60,8 +60,8 @@ const startServer = async () => {
   try {
     await connectDB();
     app.listen(PORT, () => {
-      console.log(`✅ Server running on port ${PORT}`);
-      console.log(`✅ Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
+      console.log(` Server running on port ${PORT}`);
+      console.log(` Frontend URL: ${process.env.FRONTEND_URL || 'http://localhost:5173'}`);
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error.message);
