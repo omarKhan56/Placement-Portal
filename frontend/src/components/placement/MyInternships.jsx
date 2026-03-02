@@ -1,3 +1,5 @@
+//frontend/src/components/placement/MyInternships.jsx
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';

@@ -1,3 +1,5 @@
+//frontend/src/components/placement/PostInternship.jsx
+
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';

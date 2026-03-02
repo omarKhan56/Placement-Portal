@@ -1,4 +1,6 @@
-  import { useState, useEffect } from 'react';
+//frontend/src/components/student/RecommendedJobs.jsx
+
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';

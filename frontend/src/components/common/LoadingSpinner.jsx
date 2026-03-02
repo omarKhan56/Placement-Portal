@@ -1,3 +1,5 @@
+//frontend/src/components/common/LoadingSpinner.jsx
+
 export default function LoadingSpinner({ size = 'md', text = 'Loading...' }) {
   const sizes = {
     sm: 'w-8 h-8',

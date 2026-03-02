@@ -1,3 +1,5 @@
+//frontend/src/components/common/Sidebar.jsx
+
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { 
