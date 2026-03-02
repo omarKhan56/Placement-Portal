@@ -1,3 +1,4 @@
+//backend/config/nodemailer.js
 const nodemailer = require('nodemailer');
 
 // Create transporter only if email credentials are provided

@@ -1,3 +1,5 @@
+//backend/controllers/applicationController.js
+
 const Application = require('../models/Application');
 const Student = require('../models/Student');
 const Internship = require('../models/Internship');

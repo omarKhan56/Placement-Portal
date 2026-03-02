@@ -1,3 +1,4 @@
+//backend/controllers/analyticsController.js
 const Application = require('../models/Application');
 const Internship = require('../models/Internship');
 const Student = require('../models/Student');

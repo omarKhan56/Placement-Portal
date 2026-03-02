@@ -1,3 +1,5 @@
+//backend/middleware/roleCheck.js
+
 exports.roleCheck = (roles) => {
   return (req, res, next) => {
     // Check if user exists

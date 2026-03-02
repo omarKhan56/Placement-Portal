@@ -3,6 +3,8 @@
  * Based on skills, department, preferences, and employability score
  */
 
+//backend/utils/matchingAlgorithm.js
+
 exports.calculateMatchScore = (student, internship) => {
   let score = 0;
 

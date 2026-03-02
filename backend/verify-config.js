@@ -1,3 +1,5 @@
+//backend/verify-config.js
+
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 const cloudinary = require('cloudinary').v2;

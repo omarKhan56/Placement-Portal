@@ -1,3 +1,5 @@
+//backend/controllers/studentController.js
+
 const Student = require('../models/Student');
 const cloudinary = require('../config/cloudinary');
 const streamifier = require('streamifier');

@@ -1,3 +1,5 @@
+//backend/controllers/internshipController.js
+
 const Internship = require('../models/Internship');
 const Student = require('../models/Student');
 const { getRecommendedInternships } = require('../utils/matchingAlgorithm');

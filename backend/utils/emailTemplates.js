@@ -1,3 +1,5 @@
+//backend/utils/emailTemplates.js
+
 exports.applicationSubmittedTemplate = (studentName, internshipTitle) => {
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px;">

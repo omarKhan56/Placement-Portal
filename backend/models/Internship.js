@@ -1,3 +1,5 @@
+//backend/models/Internship.js
+
 const mongoose = require('mongoose');
 
 const internshipSchema = new mongoose.Schema({

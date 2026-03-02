@@ -1,3 +1,5 @@
+//backend/server.js
+
 const express = require('express');
 const dotenv = require('dotenv');//To load environment variables from a .env file into process.env.
 const cors = require('cors'); //CORS (Cross-Origin Resource Sharing) is a browser security feature that blocks requests from different origins (domains) by default.

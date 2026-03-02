@@ -1,3 +1,5 @@
+//backend/controllers/authController.js
+
 const User = require('../models/User');
 const Student = require('../models/Student');
 const jwt = require('jsonwebtoken');
