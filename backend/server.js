@@ -12,6 +12,7 @@ dotenv.config(); //// Load environment variables from .env file
                  //Keeps secrets (DB URI, JWT secret) out of codebase
 
 const app = express();
+require("dotenv").config();
 
 
 app.use(express.json());  // this both lines 15 and 16 Converts incoming JSON / form data into req.body

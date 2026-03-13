@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 
 const connectDB = async () => {
   try {
-    // Mongoose 6+ doesn't need these options
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const conn = await mongoose.connect(process.env.MONGO_URI);
     
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
     console.log(`✅ Database Name: ${conn.connection.name}`);
