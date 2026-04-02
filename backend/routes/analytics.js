@@ -1,5 +1,9 @@
 //backend/routes/analytics.js
 
+
+//This file defines your Analytics API routes using Express.js. It basically answers:
+//“Who can access analytics data and through which endpoints?”
+
 const express = require('express');
 const router = express.Router();
 const {
