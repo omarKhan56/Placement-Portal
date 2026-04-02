@@ -1,5 +1,7 @@
 //backend/models/Application.js
 
+
+//This is a Mongoose model that defines how an “Application” (student applying for an internship) is stored in your MongoDB database.
 const mongoose = require('mongoose');
 
 const applicationSchema = new mongoose.Schema({
@@ -13,7 +15,7 @@ const applicationSchema = new mongoose.Schema({
     ref: 'Internship',
     required: true,
   },
-  status: {
+  status: { // This controls the entire application lifecycle
     type: String,
     enum: [
       'applied',
