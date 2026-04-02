@@ -5,7 +5,7 @@
 //“Who can access analytics data and through which endpoints?”
 
 const express = require('express');
-const router = express.Router();
+const router = express.Router(); // Creates a router object
 const {
   getAnalyticsDashboard,
   getInterviewSchedule,
