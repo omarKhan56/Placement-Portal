@@ -1,21 +1,23 @@
 //backend/models/Student.js
 
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const studentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   fullName: {
     type: String,
     required: true,
+    match: [/^[A-Z][a-zA-Z ]*$/, "Full Name must start with a capital letter"],
   },
   studentId: {
     type: String,
     required: true,
     unique: true,
+    match: [/^\d{6}$/, "Student ID must contain exactly 6 digits"],
   },
   department: {
     type: String,
@@ -34,12 +36,14 @@ const studentSchema = new mongoose.Schema({
   resumeUrl: String,
   coverLetter: String,
   skills: [String],
-  certifications: [{
-    name: String,
-    issuer: String,
-    dateObtained: Date,
-    certificateUrl: String,
-  }],
+  certifications: [
+    {
+      name: String,
+      issuer: String,
+      dateObtained: Date,
+      certificateUrl: String,
+    },
+  ],
   preferences: {
     domains: [String],
     locations: [String],
@@ -49,7 +53,7 @@ const studentSchema = new mongoose.Schema({
     },
     internshipType: {
       type: String,
-      enum: ['online', 'offline', 'hybrid'],
+      enum: ["online", "offline", "hybrid"],
     },
   },
   employabilityScore: {
@@ -67,17 +71,17 @@ const studentSchema = new mongoose.Schema({
 });
 
 // Calculate employability score
-studentSchema.methods.calculateEmployabilityScore = function() {
+studentSchema.methods.calculateEmployabilityScore = function () {
   let score = 0;
-  
+
   if (this.resumeUrl) score += 20;
   if (this.coverLetter) score += 10;
   if (this.skills.length > 0) score += 15;
   if (this.certifications.length > 0) score += 15;
   if (this.cgpa) score += Math.min(this.cgpa * 4, 40);
-  
+
   this.employabilityScore = Math.min(score, 100);
   return this.employabilityScore;
 };
 
-module.exports = mongoose.model('Student', studentSchema);
+module.exports = mongoose.model("Student", studentSchema);

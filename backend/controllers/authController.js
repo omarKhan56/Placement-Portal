@@ -1,9 +1,17 @@
 //backend/controllers/authController.js
 
-const User = require('../models/User');
-const Student = require('../models/Student');
-const jwt = require('jsonwebtoken');
-const sendEmail = require('../config/nodemailer');
+const User = require("../models/User");
+const Student = require("../models/Student");
+const jwt = require("jsonwebtoken");
+const sendEmail = require("../config/nodemailer");
+const {
+  validateFullName,
+  validateStudentId,
+  validatePassword,
+  validatePlacementEmail,
+  validateMentorEmail,
+  validateEmployerEmail,
+} = require("../utils/validators");
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -16,42 +24,92 @@ const generateToken = (id) => {
 // @route   POST /api/auth/register
 exports.register = async (req, res) => {
   try {
-    const { email, password, role, fullName, studentId, department, semester } = req.body;
+    const { email, password, role, fullName, studentId, department, semester } =
+      req.body;
 
-    console.log('📝 Registration attempt:', { email, role });
+    console.log("📝 Registration attempt:", { email, role });
 
     // Validate required fields
     if (!email || !password || !role) {
-      return res.status(400).json({ 
+      // Password validation
+      if (!validatePassword(password)) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Password must contain uppercase, lowercase, number, special character and be at least 8 characters long",
+        });
+      }
+      return res.status(400).json({
         success: false,
-        message: 'Please provide email, password, and role' 
+        message: "Please provide email, password, and role",
       });
     }
 
     // Check if user exists
     const userExists = await User.findOne({ email });
     if (userExists) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: 'User already exists with this email' 
+        message: "User already exists with this email",
       });
     }
 
     // Validate student-specific fields
-    if (role === 'student') {
+    if (role === "student") {
       if (!fullName || !studentId || !department || !semester) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           success: false,
-          message: 'Please provide all required student information' 
+          message: "Please provide all required student information",
         });
       }
 
-      // Check if studentId already exists
-      const studentExists = await Student.findOne({ studentId });
-      if (studentExists) {
-        return res.status(400).json({ 
+      if (!validateFullName(fullName)) {
+        return res.status(400).json({
           success: false,
-          message: 'Student ID already exists' 
+          message:
+            "Full Name must start with a capital letter and contain only alphabets",
+        });
+      }
+
+      if (!validateStudentId(studentId)) {
+        return res.status(400).json({
+          success: false,
+          message: "Student ID must contain exactly 6 digits",
+        });
+      }
+
+      const studentExists = await Student.findOne({ studentId });
+
+      if (studentExists) {
+        return res.status(400).json({
+          success: false,
+          message: "Student ID already exists",
+        });
+      }
+    }
+
+    if (role === "placement_cell") {
+      if (!validatePlacementEmail(email)) {
+        return res.status(400).json({
+          success: false,
+          message: "Placement Cell email must end with @mgmplacement.org",
+        });
+      }
+    }
+    if (role === "mentor") {
+      if (!validateMentorEmail(email)) {
+        return res.status(400).json({
+          success: false,
+          message: "Mentor email must end with @mentor.org",
+        });
+      }
+    }
+
+    if (role === "employer") {
+      if (!validateEmployerEmail(email)) {
+        return res.status(400).json({
+          success: false,
+          message: "Employer email must end with @employer.org",
         });
       }
     }
@@ -64,10 +122,10 @@ exports.register = async (req, res) => {
       isVerified: true, // Auto-verify for now
     });
 
-    console.log('✅ User created:', user._id);
+    console.log("✅ User created:", user._id);
 
     // If student, create student profile
-    if (role === 'student') {
+    if (role === "student") {
       const student = await Student.create({
         userId: user._id,
         fullName,
@@ -75,19 +133,19 @@ exports.register = async (req, res) => {
         department,
         semester: parseInt(semester),
       });
-      console.log('✅ Student profile created:', student._id);
+      console.log("✅ Student profile created:", student._id);
     }
 
     // Send welcome email (wrap in try-catch to not fail registration)
     try {
       await sendEmail({
         to: email,
-        subject: 'Welcome to Placement Portal',
+        subject: "Welcome to Placement Portal",
         html: `<p>Welcome ${fullName || email}! Your account has been created successfully.</p>`,
       });
-      console.log('✅ Welcome email sent');
+      console.log("✅ Welcome email sent");
     } catch (emailError) {
-      console.log('⚠️ Email not sent (not critical):', emailError.message);
+      console.log("⚠️ Email not sent (not critical):", emailError.message);
       // Don't fail registration if email fails
     }
 
@@ -103,10 +161,10 @@ exports.register = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('❌ Registration error:', error);
-    res.status(500).json({ 
+    console.error("❌ Registration error:", error);
+    res.status(500).json({
       success: false,
-      message: error.message || 'Registration failed. Please try again.' 
+      message: error.message || "Registration failed. Please try again.",
     });
   }
 };
@@ -117,37 +175,37 @@ exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    console.log('🔐 Login attempt:', email);
+    console.log("🔐 Login attempt:", email);
 
     // Validate email & password
     if (!email || !password) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        message: 'Please provide email and password' 
+        message: "Please provide email and password",
       });
     }
 
     // Check for user
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        message: 'Invalid credentials' 
+        message: "Invalid credentials",
       });
     }
 
     // Check password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
-      return res.status(401).json({ 
+      return res.status(401).json({
         success: false,
-        message: 'Invalid credentials' 
+        message: "Invalid credentials",
       });
     }
 
     const token = generateToken(user._id);
 
-    console.log('✅ Login successful:', user._id);
+    console.log("✅ Login successful:", user._id);
 
     res.json({
       success: true,
@@ -159,10 +217,10 @@ exports.login = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('❌ Login error:', error);
-    res.status(500).json({ 
+    console.error("❌ Login error:", error);
+    res.status(500).json({
       success: false,
-      message: error.message || 'Login failed. Please try again.' 
+      message: error.message || "Login failed. Please try again.",
     });
   }
 };
@@ -171,10 +229,10 @@ exports.login = async (req, res) => {
 // @route   GET /api/auth/me
 exports.getMe = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select('-password');
-    
+    const user = await User.findById(req.user.id).select("-password");
+
     let profile = null;
-    if (user.role === 'student') {
+    if (user.role === "student") {
       profile = await Student.findOne({ userId: user._id });
     }
 
@@ -184,10 +242,10 @@ exports.getMe = async (req, res) => {
       profile,
     });
   } catch (error) {
-    console.error('❌ Get user error:', error);
-    res.status(500).json({ 
+    console.error("❌ Get user error:", error);
+    res.status(500).json({
       success: false,
-      message: error.message 
+      message: error.message,
     });
   }
 };
