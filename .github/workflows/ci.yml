@@ -1,4 +1,4 @@
-name: Placement Portal CI
+name: Backend CI
 
 on:
   push:
@@ -12,35 +12,29 @@ on:
       - master
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: backend
+
     steps:
 
-      - name: Checkout Repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
 
-      # Backend
+      - name: Install dependencies
+        run: npm install
 
-      - name: Install Backend Dependencies
-        run: |
-          cd backend
-          npm install
-
-      # Frontend
-
-      - name: Install Frontend Dependencies
-        run: |
-          cd frontend
-          npm install
-
-      - name: Build Frontend
-        run: |
-          cd frontend
-          npm run build
+      - name: Run Tests
+        run: npm test
+        env:
+          JWT_SECRET: testsecret
+          JWT_EXPIRE: 7d
